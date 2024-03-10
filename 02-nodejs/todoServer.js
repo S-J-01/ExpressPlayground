@@ -46,4 +46,61 @@ const app = express();
 
 app.use(bodyParser.json());
 
+var todosArray = [];
+
+app.get('/todos',(req,res)=>{
+  res.status(200).json(todosArray);
+})
+
+app.get('/todos/:id',(req,res)=>{
+  var id = req.params.id;
+
+  var requiredTodo = todosArray.find(obj => obj.id===id);
+
+  if(requiredTodo){
+    res.status(200).json(requiredTodo);
+  }else{
+    res.status(404).send('element not found');
+  }
+})
+
+app.post('/todos',(req,res)=>{
+var newTodo ={
+  title:req.body.title,
+  completed:req.body.completed,
+  description:req.body.description,
+  id:Math.floor(Math.random() * 10000) + 1
+}
+
+todosArray.push(newTodo);
+res.status(201).send(`item created with an id ${newTodo.id}`);
+})
+
+app.put('/todos/:id',(req,res)=>{
+  var id = req.params.id;
+  var requiredTodoindex = todosArray.findIndex(obj => obj.id===id);
+  if(requiredTodoindex!== -1){
+  todosArray[requiredTodoindex].title=req.body.title;
+  todosArray[requiredTodoindex].completed = req.body.completed;
+  todosArray[requiredTodoindex].description = req.body.description;
+  res.status(200).send('item was found and updated');
+  }else{
+  res.status(404).send('item not found');
+  }
+})
+
+app.delete('/todos/:id',(req,res)=>{
+  var id = req.params.id;
+  var indexToDelete = todosArray.findIndex(obj => obj.id===id);
+  if(indexToDelete!== -1){
+    todosArray.splice(indexToDelete,1);
+    res.status(200).send('item found and deleted');
+  }else{
+    res.status(404).send('item not found');
+  }
+})
+
+app.use((req,res,next)=>{
+  res.status(404).send('This is an undefined route');
+})
 module.exports = app;

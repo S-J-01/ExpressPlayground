@@ -44,25 +44,19 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-//const port = 3000;
-
 app.use(bodyParser.json());
 
 var todosArray = [];
 
 app.get('/todos',(req,res)=>{
-  res.status(200).send(JSON.stringify(todosArray));
+  res.status(200).json(todosArray);
 })
 
 app.get('/todos/:id',(req,res)=>{
   var id = parseInt(req.params.id);
-  //console.log(`id is ${id}`);
-  //console.log(typeof id);
   var requiredTodo = todosArray.find((obj) => obj.id === id);
-
-  //console.log(requiredTodo);
   if(requiredTodo){
-    res.status(200).send(JSON.stringify(requiredTodo));
+    res.status(200).json(requiredTodo);
   }else{
     res.status(404).send('element not found');
   }
@@ -72,13 +66,12 @@ app.post('/todos',(req,res)=>{
 
   var newTodo ={
   title:req.body.title,
-  //completed:req.body.completed,
   description:req.body.description,
   id:Math.floor(Math.random() * 100) + 1
 }
 
 todosArray.push(newTodo);
-res.status(201).send(`item created with an id ${newTodo.id}`);
+res.status(201).json({id:newTodo.id});
 })
 
 app.put('/todos/:id',(req,res)=>{
@@ -86,7 +79,6 @@ app.put('/todos/:id',(req,res)=>{
   var requiredTodoindex = todosArray.findIndex((obj) => obj.id === id);
   if(requiredTodoindex!== -1){
   todosArray[requiredTodoindex].title=req.body.title;
-  todosArray[requiredTodoindex].completed = req.body.completed;
   todosArray[requiredTodoindex].description = req.body.description;
   res.status(200).send('item was found and updated');
   }else{
@@ -109,7 +101,3 @@ app.use((req,res,next)=>{
   res.status(404).send('This is an undefined route');
 })
 module.exports = app;
-
-// app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}`)
-// })

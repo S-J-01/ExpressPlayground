@@ -32,6 +32,62 @@
 const express = require("express")
 const PORT = 3000;
 const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 // write your logic here, DONT WRITE app.listen(3000) when you're running tests, the tests will automatically start the server
 
+var userArray = [];
+
+
+app.post('/signup',(req,res)=>{
+  var newUser = {
+    email : req.body.email,
+    password : req.body.password,
+    firstName : req.body.firstName,
+    lastName : req.body.lastName,
+    id : Math.floor(Math.random() * 10000) + 1
+  }
+
+  var doesUserNameExistAlready = userArray.find((obj)=>obj.email===newUser.email);
+
+  if(doesUserNameExistAlready){
+    res.status(400).send(`username already exists`);
+  }else{
+    userArray.push(newUser);
+    res.status(201).send(`Signup successful`);
+  }
+})
+
+app.post('/login',(req,res)=>{
+  var email = req.body.email;
+  var password = req.body.password;
+  console.log(typeof email);
+  console.log(email);
+  console.log(typeof password);
+  console.log(password);
+  console.log(userArray);
+
+  var isMatch = userArray.find((obj) => obj.email === req.body.email && obj.password === req.body.password);
+  console.log(`value of isMatch is ${isMatch}`);
+
+  if(isMatch){
+    res.status(200).json({firstName:isMatch.firstName, lastName:isMatch.lastName, id:isMatch.id, email:isMatch.email});
+
+  }else{
+    res.status(401).send(`credentials are invalid`);
+  }
+})
+
+app.get('/data',(req,res)=>{
+  var email = req.headers.email;
+  var password = req.headers.password;
+
+  var isAuthorized = userArray.find((obj)=> obj.email===email && obj.password=== password);
+
+  if(isAuthorized){
+    res.status(200).json({users:userArray});
+  }else{
+    res.status(401).send(`Unauthorized`);
+  }
+})
 module.exports = app;

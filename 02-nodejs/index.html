@@ -7,8 +7,17 @@
 </head>
 <script>
     function onPress(){
+        var titleValue = document.getElementById('title').value;
+        var descriptionValue = document.getElementById('description').value;
         fetch('http://localhost:3000/todos',{
-            method:'GET'
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                title : titleValue,
+                description : descriptionValue
+            })
         }).then(resp=>{
             return resp.json();
         }).then(data=>{

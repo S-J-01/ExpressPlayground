@@ -6,6 +6,17 @@
     <title>Todo Application</title>
 </head>
 <script>
+    window.onload = ()=>{
+        fetch('http://localhost:3000/todos',{
+            method:'GET'
+        }).then(resp=>{
+            return resp.json();
+        }).then(data=>{
+            console.log(data);
+            var parentElement = document.getElementById('mainArea');
+            parentElement.innerHTML= JSON.stringify(data);
+        })
+    }
     function onPress(){
         var titleValue = document.getElementById('title').value;
         var descriptionValue = document.getElementById('description').value;
@@ -31,5 +42,8 @@
     Todo description
     <input type="text" id="description"></input>
     <button onclick="onPress()">send todo</button>
+    <div id="mainArea">
+        
+    </div>
 </body>
 </html>

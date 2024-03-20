@@ -92,7 +92,7 @@
     fs.writeFile('./todos.json',JSON.stringify(todosArray),(err)=>{
       if (err) throw err;
       console.log(`wrote data to file for post /todos`);
-      res.status(201).json({id:newTodo.id});
+      res.status(201).json(newTodo);
     })
   })
 })

@@ -133,7 +133,7 @@ app.delete('/todos/:id',(req,res)=>{
    fs.writeFile('./todos.json',JSON.stringify(todosArray),(err)=>{
      if (err) throw err;
      console.log(`wrote data to file for delete /todos/:id`);
-     res.status(200).send('item found and deleted');
+     res.status(200).json({id:id});
    })
   }else{
     res.status(404).send('item not found');

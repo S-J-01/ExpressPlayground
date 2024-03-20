@@ -23,6 +23,7 @@
                 grandChildElement2.innerHTML= 'description: '+ data[i].description+ ' ';
                 var grandChildElement3 = document.createElement('button');
                 grandChildElement3.innerHTML = 'delete';
+                grandChildElement3.setAttribute("onClick", "deleteTodo(" + data[i].id+ ")" );
 
                 childElement.appendChild(grandChildElement1);
                 childElement.appendChild(grandChildElement2);
@@ -31,6 +32,19 @@
                 parentElement.appendChild(childElement);
             
             }
+        })
+    }
+    function deleteTodo(id){
+        console.log('id to be deleted is '+ id);
+        fetch('http://localhost:3000/todos/'+encodeURIComponent(id),{
+            method:'DELETE',
+            headers:{
+                'Content-Type':'application/json'
+            }
+        }).then(resp=>{
+            return resp.json();
+        }).then(data=>{
+            console.log(data);
         })
     }
     function onPress(){
@@ -58,6 +72,7 @@
             grandChildElement2.innerHTML= "description : "+ data.description+ ' ';
             var grandChildElement3=document.createElement('button');
             grandChildElement3.innerHTML = 'delete';
+            grandChildElement3.setAttribute("onClick", "deleteTodo(" + data.id+ ")" );
 
             childElement.appendChild(grandChildElement1);
             childElement.appendChild(grandChildElement2);

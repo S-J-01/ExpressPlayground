@@ -17,6 +17,7 @@
             //parentElement.innerHTML= JSON.stringify(data);
             for (var i=0;i<data.length;i++){
                 var childElement = document.createElement('div');
+                childElement.setAttribute("id",data[i].id);
                 var grandChildElement1 = document.createElement('span');
                 grandChildElement1.innerHTML = 'title: '+ data[i].title + ' ';
                 var grandChildElement2 = document.createElement('span');
@@ -45,6 +46,9 @@
             return resp.json();
         }).then(data=>{
             console.log(data);
+            var parentElement = document.getElementById('mainArea');
+            var childElementToRemove = document.getElementById(data.id);
+            parentElement.removeChild(childElementToRemove);
         })
     }
     function onPress(){
@@ -66,6 +70,7 @@
             var parentElement = document.getElementById('mainArea');
 
             var childElement= document.createElement('div');
+            childElement.setAttribute("id",data.id);
             var grandChildElement1 = document.createElement('span');
             grandChildElement1.innerHTML = "title : " + data.title +' ';
             var grandChildElement2= document.createElement('span');
